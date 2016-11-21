@@ -2,6 +2,7 @@
 	"email": {
 		"host": "smtp.mailgun.org",
 		"port": 587,
+		"tls": true,
 		"username": "",
 		"password": "",
 		"mail_from": "",

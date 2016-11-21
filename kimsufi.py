@@ -112,8 +112,9 @@ def send_mail(output, total):
             config = json.load(data)
             mail_host = config['email']['host']
             mail_port = config['email']['port']
-            mail_username = config['email']['username']
-            mail_password = config['email']['password']
+            mail_tls = config['email'].get('tls', True)
+            mail_username = config['email'].get('username', None)
+            mail_password = config['email'].get('password', None)
             mail_from = config['email']['mail_from']
             mail_to = config['email']['mail_to']
 
@@ -140,14 +141,16 @@ def send_mail(output, total):
         return False
 
     server.ehlo()
-    server.starttls()
-    server.ehlo()
+    if mail_tls:
+        server.starttls()
+        server.ehlo()
 
-    try:
-        server.login(mail_username, mail_password)
-    except smtplib.SMTPAuthenticationError:
-        print('SMPT Auth Error!')
-        return False
+    if mail_username is not None:
+        try:
+            server.login(mail_username, mail_password)
+        except smtplib.SMTPAuthenticationError:
+            print('SMPT Auth Error!')
+            return False
 
     try:
         server.sendmail(mail_from, mail_to, headers + output)
