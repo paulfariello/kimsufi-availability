@@ -183,9 +183,7 @@ if __name__ == '__main__':
         ["is", "are"][total > 1]
     )
 
-    if total != 0:
-        if arguments['--mail']:
-            print(output)
-            send_mail(output, total)
-        else:
-            print(output)
+    if total != 0 and arguments['--mail']:
+        send_mail(output, total)
+    else:
+        print(output)
